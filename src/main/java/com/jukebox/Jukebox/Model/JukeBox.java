@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 public class JukeBox{
     @JsonProperty("id")
-    public int id;
+    public String id;
     @JsonProperty("model")
     public String model;
     @JsonProperty("components")

@@ -10,8 +10,6 @@ public class JukeboxApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(JukeboxApplication.class, args);
 		JukeBoxHelper helper = new JukeBoxHelper();
-		//helper.getAllJukeBoxes();
-		helper.getAllJukeBoxSettings();
 	}
 
 

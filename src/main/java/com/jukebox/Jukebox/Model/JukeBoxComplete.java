@@ -1,6 +1,11 @@
 package com.jukebox.Jukebox.Model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,11 +16,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class JukeBox{
-    @JsonProperty("id")
+public class JukeBoxComplete {
     public String id;
-    @JsonProperty("model")
     public String model;
-    @JsonProperty("components")
-    public List<ComponentTable> components;
+    public List<String> components;
 }

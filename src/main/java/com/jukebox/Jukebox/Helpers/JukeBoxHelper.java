@@ -1,22 +1,38 @@
 package com.jukebox.Jukebox.Helpers;
 
-import com.jukebox.Jukebox.Model.JukeBox;
-import com.jukebox.Jukebox.Model.JukeBoxSettings;
-import com.jukebox.Jukebox.Model.Settings;
+import com.jukebox.Jukebox.Model.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+@Data
+@AllArgsConstructor
 public class JukeBoxHelper {
     private final String JUKEBOXAPI = "http://my-json-server.typicode.com/touchtunes/tech-assignment/";
     private final String JUKEBOXENDPOINT = "jukes";
     private final String SETTINGJUKEBOXENDPOINT = "settings";
     private WebClient webClient;
+    private List<JukeBox> jukeBoxes;
+    private Settings settings;
+    private List<JukeBoxComplete> jukeBoxComplete;
+
+    public JukeBoxHelper(){
+        jukeBoxes = (List<JukeBox>) getAllJukeBoxes();
+        settings = getAllJukeBoxSettings();
+        jukeBoxComplete = (List<JukeBoxComplete>) jukeBoxFormated(jukeBoxes,settings);
+    }
 
     private void initWebClient(String baseUrl){
         webClient = WebClient.builder()
@@ -25,8 +41,6 @@ public class JukeBoxHelper {
                 .defaultHeader(HttpHeaders.USER_AGENT, "Spring 5 WebClient")
                 .build();
     }
-
-
     public List<JukeBox> getAllJukeBoxes(){
 
         initWebClient(JUKEBOXAPI);
@@ -42,6 +56,7 @@ public class JukeBoxHelper {
         return jukeBoxes;
     }
 
+
     public Settings getAllJukeBoxSettings(){
         initWebClient(JUKEBOXAPI);
 
@@ -56,9 +71,23 @@ public class JukeBoxHelper {
         return jukeBoxSettings;
     }
 
-
-    public JukeBoxHelper(){
-
+    public List<JukeBoxComplete> jukeBoxFormated(List<JukeBox> jukeBoxes, Settings setting){
+        List<JukeBoxComplete> jukeBoxComplete = new ArrayList<>();
+        for (Object jukeBoxe : jukeBoxes.toArray()) {
+            JukeBox castedJukeBox = (JukeBox) jukeBoxe;
+            List<String> components = new ArrayList<>();
+            for (Object component: castedJukeBox.getComponents().toArray()) {
+                ComponentTable castedComponent = (ComponentTable) component;
+                components.add(castedComponent.getName());
+            }
+            jukeBoxComplete.add(new JukeBoxComplete(castedJukeBox.id,castedJukeBox.model,components));
+        }
+        return jukeBoxComplete;
     }
+
+    public <String> boolean listEqualsIgnoreOrder(List<String> list1, List<String> list2) {
+        return new HashSet<>(list1).equals(new HashSet<>(list2));
+    }
+
 
 }

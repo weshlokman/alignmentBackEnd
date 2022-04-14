@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Components {
+public class ComponentTable {
     @JsonProperty("name")
     public String name;
 }
